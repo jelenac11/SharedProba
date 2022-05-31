@@ -109,6 +109,7 @@ func CheckRoles(roles []string) gin.HandlerFunc {
 }
 
 func checkIfUserHasRequiredRole(roles []string, tokenString string) bool {
+	fmt.Println("POLUDECUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU")
 	fmt.Println(tokenString)
 	fmt.Println()
 	fmt.Println("AAAAAAAAAAAAAAAAAAAAAAGAO")
