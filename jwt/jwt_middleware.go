@@ -130,6 +130,7 @@ func checkIfUserHasRequiredRole(roles []string, tokenString string) bool {
 	claims, ok := token.Claims.(*CustomClaims)
 	fmt.Println("neki klejms")
 	fmt.Println(claims)
+	fmt.Println(claims.Roles)
 	if ok && token.Valid {
 		for _, providedRole := range roles {
 			for _, requiredRole := range claims.Roles {
