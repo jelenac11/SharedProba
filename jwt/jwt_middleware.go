@@ -111,6 +111,7 @@ func CheckRoles(roles []string) gin.HandlerFunc {
 func checkIfUserHasRequiredRole(roles []string, tokenString string) bool {
 	fmt.Println(tokenString)
 	fmt.Println()
+	fmt.Println("AAAAAAAAAAAAAAAAAAAAAAGAO")
 	token, _ := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 		cert, err := getCertificate(token)
 		if err != nil {
@@ -120,6 +121,7 @@ func checkIfUserHasRequiredRole(roles []string, tokenString string) bool {
 		return result, nil
 	})
 
+	fmt.Println("SsTIGAO")
 	fmt.Println(token)
 	fmt.Println()
 	fmt.Println(token.Claims)
