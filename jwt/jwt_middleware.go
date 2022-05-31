@@ -3,7 +3,9 @@ package jwt
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
+	"strings"
 
 	jwtmiddleware "github.com/auth0/go-jwt-middleware"
 	"github.com/form3tech-oss/jwt-go"
@@ -21,6 +23,11 @@ type JSONWebKeys struct {
 	N   string   `json:"n"`
 	E   string   `json:"e"`
 	X5c []string `json:"x5c"`
+}
+
+type CustomClaims struct {
+	Roles []string `json:"https://nistagram/roles"`
+	jwt.StandardClaims
 }
 
 func GetJwtMiddleware() gin.HandlerFunc {
@@ -84,4 +91,46 @@ func getCertificate(token *jwt.Token) (string, error) {
 	}
 
 	return cert, nil
+}
+
+func CheckRoles(roles []string) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		authHeaderParts := strings.Split(c.GetHeader("Authorization"), " ")
+		token := authHeaderParts[1]
+		hasScope := checkIfUserHasRequiredRole(roles, token)
+
+		if !hasScope {
+			err := errors.New("Insufficient permissions")
+			c.AbortWithError(401, err)
+			return
+		}
+		c.Next()
+	}
+}
+
+func checkIfUserHasRequiredRole(roles []string, tokenString string) bool {
+	fmt.Println(tokenString)
+	token, _ := jwt.ParseWithClaims(tokenString, &CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+		cert, err := getCertificate(token)
+		if err != nil {
+			return nil, err
+		}
+		result, _ := jwt.ParseRSAPublicKeyFromPEM([]byte(cert))
+		return result, nil
+	})
+
+	fmt.Println(token)
+	claims, ok := token.Claims.(*CustomClaims)
+
+	if ok && token.Valid {
+		for _, providedRole := range roles {
+			for _, requiredRole := range claims.Roles {
+				if providedRole == requiredRole {
+					return true
+				}
+			}
+		}
+	}
+
+	return false
 }
