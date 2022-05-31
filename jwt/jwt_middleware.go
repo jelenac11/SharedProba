@@ -72,7 +72,7 @@ func getCertificate(token *jwt.Token) (string, error) {
 		return cert, err
 	}
 
-	for key, _ := range jwks.Keys {
+	for key := range jwks.Keys {
 		if token.Header["kid"] == jwks.Keys[key].Kid {
 			cert = "-----BEGIN CERTIFICATE-----\n" + jwks.Keys[key].X5c[0] + "\n-----END CERTIFICATE-----"
 		}
