@@ -1,4 +1,4 @@
-module shared
+module github.com/jelenac11/SharedProba
 
 go 1.18
 
