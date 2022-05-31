@@ -67,7 +67,7 @@ func getCertificate(token *jwt.Token) (string, error) {
 	cert := ""
 
 	//This endpoint will contain the JWK used to verify all Auth0-issued JWTs for this tenant.
-	resp, err := http.Get("dev-4l1tkzmy.eu.auth0.com/.well-known/jwks.json")
+	resp, err := http.Get("https://dev-4l1tkzmy.eu.auth0.com/.well-known/jwks.json")
 	if err != nil {
 		return cert, err
 	}
