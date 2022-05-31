@@ -26,7 +26,7 @@ type JSONWebKeys struct {
 }
 
 type CustomClaims struct {
-	Roles []string `json:"https://nistagram/roles"`
+	Roles []string `json:"permissions"`
 	jwt.StandardClaims
 }
 
